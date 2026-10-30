@@ -1,0 +1,83 @@
+{
+  "works": [
+    {
+      "slug": "clipsync",
+      "title": "ClipSync",
+      "subtitle": "局域网内的跨设备剪贴板同步",
+      "category": "desktop-tools",
+      "summary": "不依赖云端的剪贴板同步工具，同一局域网内自动发现设备，支持文本、图片与文件路径。",
+      "body_md": "## 特点\n\n- 局域网直连，数据不出内网\n- 文本、图片、文件路径三类剪贴板内容\n- 支持 Windows / macOS / Linux 三端互传\n\n## 启动方式\n\n首次运行会在托盘区常驻，右键菜单可设置开机自启与监听端口。",
+      "cover_url": "https://cdn.example.com/covers/clipsync.png",
+      "status": "released",
+      "license": "MIT",
+      "version": "1.4.2",
+      "released_at": "2026-08-12",
+      "updated_at": "2026-10-20",
+      "sort_weight": 100,
+      "tags": ["windows", "macos", "linux", "self-hosted"],
+      "assets": [
+        { "kind": "download", "platform": "windows", "label": "Windows x64 安装包", "url": "https://cdn.example.com/clipsync/ClipSync-1.4.2-x64.exe", "size_bytes": 18342016, "version": "1.4.2", "sort_weight": 30 },
+        { "kind": "download", "platform": "macos", "label": "macOS Universal dmg", "url": "https://cdn.example.com/clipsync/ClipSync-1.4.2.dmg", "size_bytes": 24117248, "version": "1.4.2", "sort_weight": 20 },
+        { "kind": "download", "platform": "linux", "label": "Linux AppImage", "url": "https://cdn.example.com/clipsync/ClipSync-1.4.2-x86_64.AppImage", "size_bytes": 41230336, "version": "1.4.2", "sort_weight": 10 },
+        { "kind": "source", "platform": "any", "label": "源代码仓库", "url": "https://example.com/clipsync", "sort_weight": 0 }
+      ]
+    },
+    {
+      "slug": "subtitle-forge",
+      "title": "SubtitleForge",
+      "subtitle": "批量字幕生成与对齐",
+      "category": "desktop-tools",
+      "summary": "基于本地 whisper 模型的批量字幕生成工具，输出 srt 与 ass，支持按句对齐与时间轴微调。",
+      "body_md": "## 使用流程\n\n1. 拖入视频目录\n2. 选择模型规格（tiny / base / small / medium）\n3. 设置输出格式后开始任务\n\n任务队列支持断点续跑，中断后重新打开会从上次位置继续。",
+      "cover_url": "https://cdn.example.com/covers/subtitle-forge.png",
+      "status": "released",
+      "license": "MIT",
+      "version": "0.9.7",
+      "released_at": "2026-06-30",
+      "updated_at": "2026-09-18",
+      "sort_weight": 90,
+      "tags": ["windows", "ffmpeg"],
+      "assets": [
+        { "kind": "download", "platform": "windows", "label": "Windows x64 便携版", "url": "https://cdn.example.com/subtitle-forge/SubtitleForge-0.9.7-portable.zip", "size_bytes": 64382566, "version": "0.9.7", "sort_weight": 10 }
+      ]
+    },
+    {
+      "slug": "pocket-scan",
+      "title": "PocketScan",
+      "subtitle": "离线文档扫描",
+      "category": "mobile-tools",
+      "summary": "完全离线的文档扫描与 OCR，不申请网络权限，导出 PDF 与图片。",
+      "body_md": "## 说明\n\n所有识别在设备本地完成，应用不包含网络请求代码。",
+      "cover_url": "https://cdn.example.com/covers/pocket-scan.png",
+      "status": "released",
+      "license": "Proprietary",
+      "version": "2.1.0",
+      "released_at": "2026-04-05",
+      "updated_at": "2026-07-22",
+      "sort_weight": 80,
+      "tags": ["android"],
+      "assets": [
+        { "kind": "download", "platform": "android", "label": "Android arm64 apk", "url": "https://cdn.example.com/pocketscan/PocketScan-2.1.0-arm64.apk", "size_bytes": 31876710, "version": "2.1.0", "sort_weight": 10 }
+      ]
+    },
+    {
+      "slug": "tmux-cheatsheet",
+      "title": "Tmux 速查卡",
+      "subtitle": "键盘操作与配置片段",
+      "category": "desktop-tools",
+      "summary": "常用 tmux 快捷键与配置文件片段，按场景分类整理。",
+      "body_md": "## 配置文件片段\n\n将片段追加到 `~/.tmux.conf` 后执行 `tmux source-file ~/.tmux.conf` 生效。",
+      "cover_url": null,
+      "status": "released",
+      "license": "CC-BY-4.0",
+      "version": "1.0.0",
+      "released_at": "2025-11-02",
+      "updated_at": "2026-02-14",
+      "sort_weight": 60,
+      "tags": ["linux", "macos"],
+      "assets": [
+        { "kind": "doc", "platform": "any", "label": "在线速查", "url": "https://example.com/tmux", "sort_weight": 10 }
+      ]
+    }
+  ]
+}

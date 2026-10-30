@@ -1,0 +1,132 @@
+{
+  "config_groups": [
+    {
+      "key": "app",
+      "label": "应用",
+      "description": "影响应用整体行为的基础配置",
+      "sort_weight": 100,
+      "entries": [
+        {
+          "key": "api_base_url",
+          "label": "数据源地址",
+          "value_type": "string",
+          "value": "https://raw.example.com",
+          "default_value": "https://raw.example.com",
+          "description": "客户端拉取数据集的主地址，切换镜像时改这里",
+          "scope": "app",
+          "min_version": "1.0.0",
+          "sort_weight": 100
+        },
+        {
+          "key": "enable_telemetry",
+          "label": "崩溃上报",
+          "value_type": "bool",
+          "value": "false",
+          "default_value": "false",
+          "description": "默认关闭，完全不做任何网络上报",
+          "scope": "app",
+          "sort_weight": 90
+        },
+        {
+          "key": "default_shell",
+          "label": "默认 Shell",
+          "value_type": "enum",
+          "value": "bash",
+          "default_value": "bash",
+          "enum_values": "bash,zsh,powershell,cmd",
+          "description": "命令详情页默认高亮的语法",
+          "scope": "device",
+          "sort_weight": 80
+        },
+        {
+          "key": "cache_ttl_seconds",
+          "label": "清单缓存时间",
+          "value_type": "int",
+          "value": "21600",
+          "default_value": "21600",
+          "description": "多久检查一次数据集更新，单位秒，默认 6 小时",
+          "scope": "app",
+          "sort_weight": 70
+        }
+      ]
+    },
+    {
+      "key": "network",
+      "label": "网络",
+      "description": "下载与请求相关的策略",
+      "sort_weight": 90,
+      "entries": [
+        {
+          "key": "request_timeout_ms",
+          "label": "请求超时",
+          "value_type": "int",
+          "value": "15000",
+          "default_value": "15000",
+          "description": "单次 HTTP 请求超时时间，毫秒",
+          "scope": "app",
+          "sort_weight": 100
+        },
+        {
+          "key": "retry_count",
+          "label": "重试次数",
+          "value_type": "int",
+          "value": "2",
+          "default_value": "2",
+          "description": "主源失败后切换备用源前的重试次数",
+          "scope": "app",
+          "sort_weight": 90
+        },
+        {
+          "key": "mirror_hosts",
+          "label": "镜像地址列表",
+          "value_type": "json",
+          "value": "[\"https://raw.example.com\",\"https://gitee.example.com/raw\"]",
+          "default_value": "[]",
+          "description": "按顺序尝试的备用地址，JSON 数组",
+          "scope": "app",
+          "sort_weight": 80
+        }
+      ]
+    },
+    {
+      "key": "ui",
+      "label": "界面",
+      "description": "外观与排版",
+      "sort_weight": 80,
+      "entries": [
+        {
+          "key": "theme_mode",
+          "label": "主题",
+          "value_type": "enum",
+          "value": "system",
+          "default_value": "system",
+          "enum_values": "system,light,dark",
+          "description": "跟随系统或强制指定",
+          "scope": "device",
+          "sort_weight": 100
+        },
+        {
+          "key": "font_scale",
+          "label": "字号缩放",
+          "value_type": "float",
+          "value": "1.0",
+          "default_value": "1.0",
+          "description": "代码块等宽字体的缩放倍率",
+          "scope": "device",
+          "sort_weight": 90
+        },
+        {
+          "key": "list_density",
+          "label": "列表密度",
+          "value_type": "enum",
+          "value": "comfortable",
+          "default_value": "comfortable",
+          "enum_values": "comfortable,compact",
+          "description": "作品与命令列表的行高",
+          "scope": "device",
+          "sort_weight": 80
+        }
+      ]
+    }
+  ]
+}

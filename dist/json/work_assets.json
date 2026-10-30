@@ -1,0 +1,102 @@
+{
+  "table": "work_assets",
+  "dataset_version": "2026.10.29.2",
+  "columns": [
+    "id",
+    "work_id",
+    "kind",
+    "platform",
+    "label",
+    "url",
+    "size_bytes",
+    "sha256",
+    "version",
+    "sort_weight"
+  ],
+  "rows": [
+    {
+      "id": 1,
+      "work_id": 1,
+      "kind": "download",
+      "platform": "windows",
+      "label": "Windows x64 安装包",
+      "url": "https://cdn.example.com/clipsync/ClipSync-1.4.2-x64.exe",
+      "size_bytes": 18342016,
+      "sha256": null,
+      "version": "1.4.2",
+      "sort_weight": 30
+    },
+    {
+      "id": 2,
+      "work_id": 1,
+      "kind": "download",
+      "platform": "macos",
+      "label": "macOS Universal dmg",
+      "url": "https://cdn.example.com/clipsync/ClipSync-1.4.2.dmg",
+      "size_bytes": 24117248,
+      "sha256": null,
+      "version": "1.4.2",
+      "sort_weight": 20
+    },
+    {
+      "id": 3,
+      "work_id": 1,
+      "kind": "download",
+      "platform": "linux",
+      "label": "Linux AppImage",
+      "url": "https://cdn.example.com/clipsync/ClipSync-1.4.2-x86_64.AppImage",
+      "size_bytes": 41230336,
+      "sha256": null,
+      "version": "1.4.2",
+      "sort_weight": 10
+    },
+    {
+      "id": 4,
+      "work_id": 1,
+      "kind": "source",
+      "platform": "any",
+      "label": "源代码仓库",
+      "url": "https://example.com/clipsync",
+      "size_bytes": null,
+      "sha256": null,
+      "version": null,
+      "sort_weight": 0
+    },
+    {
+      "id": 5,
+      "work_id": 2,
+      "kind": "download",
+      "platform": "windows",
+      "label": "Windows x64 便携版",
+      "url": "https://cdn.example.com/subtitle-forge/SubtitleForge-0.9.7-portable.zip",
+      "size_bytes": 64382566,
+      "sha256": null,
+      "version": "0.9.7",
+      "sort_weight": 10
+    },
+    {
+      "id": 6,
+      "work_id": 3,
+      "kind": "download",
+      "platform": "android",
+      "label": "Android arm64 apk",
+      "url": "https://cdn.example.com/pocketscan/PocketScan-2.1.0-arm64.apk",
+      "size_bytes": 31876710,
+      "sha256": null,
+      "version": "2.1.0",
+      "sort_weight": 10
+    },
+    {
+      "id": 7,
+      "work_id": 4,
+      "kind": "doc",
+      "platform": "any",
+      "label": "在线速查",
+      "url": "https://example.com/tmux",
+      "size_bytes": null,
+      "sha256": null,
+      "version": null,
+      "sort_weight": 10
+    }
+  ]
+}

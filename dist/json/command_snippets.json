@@ -1,0 +1,105 @@
+{
+  "table": "command_snippets",
+  "dataset_version": "2026.10.29.2",
+  "columns": [
+    "id",
+    "command_id",
+    "seq",
+    "lang",
+    "title",
+    "code",
+    "note"
+  ],
+  "rows": [
+    {
+      "id": 1,
+      "command_id": 1,
+      "seq": 0,
+      "lang": "bash",
+      "title": "对最近 3 个提交做交互式变基",
+      "code": "git rebase -i HEAD~3",
+      "note": "把 pick 改成 squash 或 fixup 即可合并，改成 reword 可改提交信息。"
+    },
+    {
+      "id": 2,
+      "command_id": 1,
+      "seq": 1,
+      "lang": "bash",
+      "title": "已经推到远端时强推",
+      "code": "git push --force-with-lease origin main",
+      "note": "用 --force-with-lease 而不是 --force，避免覆盖他人提交。"
+    },
+    {
+      "id": 3,
+      "command_id": 2,
+      "seq": 0,
+      "lang": "bash",
+      "title": "单文件转换模板",
+      "code": "ffmpeg -i \"${input}\" -c:v libx265 -crf ${crf} -preset ${preset} -tag:v hvc1 -c:a copy \"${output}\"",
+      "note": "-c:a copy 直接复制音轨，不重新编码。"
+    },
+    {
+      "id": 4,
+      "command_id": 2,
+      "seq": 1,
+      "lang": "bash",
+      "title": "目录批量处理",
+      "code": "for f in \"${input_dir}\"/*.mp4; do ffmpeg -i \"$f\" -c:v libx265 -crf ${crf} -preset ${preset} -tag:v hvc1 -c:a copy \"${output_dir}/$(basename \"${f%.*}\")${suffix}.mp4\"; done",
+      "note": "建议先拿一个文件试参数，再跑整目录。"
+    },
+    {
+      "id": 5,
+      "command_id": 3,
+      "seq": 0,
+      "lang": "powershell",
+      "title": "清空 WinINET 代理",
+      "code": "Set-ItemProperty -Path 'HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings' -Name ProxyEnable -Value 0\nRemove-ItemProperty -Path 'HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings' -Name ProxyServer -ErrorAction SilentlyContinue",
+      "note": "执行后需要重开浏览器或应用才会读到新配置。"
+    },
+    {
+      "id": 6,
+      "command_id": 3,
+      "seq": 1,
+      "lang": "powershell",
+      "title": "顺便重置 WinHTTP 代理",
+      "code": "netsh winhttp reset proxy",
+      "note": "服务类程序走的是 WinHTTP，与 WinINET 是两套配置。"
+    },
+    {
+      "id": 7,
+      "command_id": 4,
+      "seq": 0,
+      "lang": "bash",
+      "title": "先看能释放多少",
+      "code": "docker system df",
+      "note": "养成先看后删的习惯。"
+    },
+    {
+      "id": 8,
+      "command_id": 4,
+      "seq": 1,
+      "lang": "bash",
+      "title": "清理镜像、容器、网络、构建缓存",
+      "code": "docker system prune -a --volumes",
+      "note": "--volumes 会连数据卷一起删，确认没有需要保留的数据库卷再执行。"
+    },
+    {
+      "id": 9,
+      "command_id": 5,
+      "seq": 0,
+      "lang": "bash",
+      "title": "常驻后台转发",
+      "code": "ssh -N -L ${local_port}:${remote_host}:${remote_port} ${user}@${jump_host}",
+      "note": "-N 只做转发不开 shell，配合 -f 可放后台。"
+    },
+    {
+      "id": 10,
+      "command_id": 5,
+      "seq": 1,
+      "lang": "bash",
+      "title": "加保活参数，防止空闲断开",
+      "code": "ssh -N -o ServerAliveInterval=30 -L ${local_port}:${remote_host}:${remote_port} ${user}@${jump_host}",
+      "note": "网络抖动频繁时必加。"
+    }
+  ]
+}

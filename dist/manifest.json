@@ -1,0 +1,65 @@
+{
+  "dataset_id": "widget-toolbox",
+  "dataset_version": "2026.10.29.2",
+  "schema_version": 1,
+  "min_client_build": 1,
+  "built_at": "2026-10-30T08:54:33+08:00",
+  "content_hash": "e8bc9e19271a52333494862d165a1e084ef2dbd991ecb299879d36f7f94c20ee",
+  "files": [
+    {
+      "name": "appdata.db",
+      "size": 159744,
+      "sha256": "d61c46272ab40ebaff6051215b8c1675318bca402d17215e17da668e6dfb00a3",
+      "url": "appdata.db"
+    },
+    {
+      "name": "appdata.db.gz",
+      "size": 12628,
+      "sha256": "53b6c20c5c20f293c33108d15d1299f7218884a415dcb5adc3120d93166bf9de",
+      "url": "appdata.db.gz",
+      "encoding": "gzip",
+      "uncompressed_size": 159744
+    }
+  ],
+  "tables": {
+    "meta": 6,
+    "categories": 6,
+    "tags": 9,
+    "works": 4,
+    "work_tags": 9,
+    "work_assets": 7,
+    "commands": 5,
+    "command_snippets": 10,
+    "command_params": 16,
+    "command_tags": 11,
+    "config_groups": 3,
+    "config_entries": 10,
+    "changelog": 4
+  },
+  "json": {
+    "dir": "json",
+    "index": "json/index.json",
+    "index_sha256": "0abcdb3bb53b1458e6f6fc967e31279c2283a5b0cee6be192cdad4d17adc8263",
+    "contract": "json/contract.json",
+    "contract_sha256": "43d835aca4324534077769b755da4d6879bdc8a55c7f2b9b6a23c54dca74326a",
+    "bundle": "json/bundle.json",
+    "bundle_size": 19296,
+    "bundle_sha256": "f1827b97ce981a9fd206ed106b917622ab22a36d92be5cb343d6f35211f5ca78",
+    "contract_version": 1,
+    "tables": [
+      "meta",
+      "categories",
+      "tags",
+      "works",
+      "work_tags",
+      "work_assets",
+      "commands",
+      "command_snippets",
+      "command_params",
+      "command_tags",
+      "config_groups",
+      "config_entries",
+      "changelog"
+    ]
+  }
+}

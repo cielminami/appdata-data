@@ -1,0 +1,7 @@
+{
+  "dataset_id": "widget-toolbox",
+  "title": "Toolbox 只读数据集",
+  "schema_version": 1,
+  "min_client_build": 1,
+  "default_locale": "zh-CN"
+}

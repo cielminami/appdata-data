@@ -1,0 +1,34 @@
+{
+  "table": "config_groups",
+  "dataset_version": "2026.10.29.2",
+  "columns": [
+    "id",
+    "key",
+    "label",
+    "description",
+    "sort_weight"
+  ],
+  "rows": [
+    {
+      "id": 1,
+      "key": "app",
+      "label": "应用",
+      "description": "影响应用整体行为的基础配置",
+      "sort_weight": 100
+    },
+    {
+      "id": 2,
+      "key": "network",
+      "label": "网络",
+      "description": "下载与请求相关的策略",
+      "sort_weight": 90
+    },
+    {
+      "id": 3,
+      "key": "ui",
+      "label": "界面",
+      "description": "外观与排版",
+      "sort_weight": 80
+    }
+  ]
+}

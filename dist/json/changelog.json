@@ -1,0 +1,31 @@
+{
+  "table": "changelog",
+  "dataset_version": "2026.10.29.2",
+  "columns": [
+    "version",
+    "released_at",
+    "notes"
+  ],
+  "rows": [
+    {
+      "version": "2026.10.29.2",
+      "released_at": "2026-10-29",
+      "notes": "新增数据契约 contract.json：字段语义、稳定性等级、枚举含义、唯一性约束、生命周期状态；构建时对契约与结构、数据双向校验。"
+    },
+    {
+      "version": "2026.10.29.1",
+      "released_at": "2026-10-29",
+      "notes": "新增 SSH 端口转发命令；ClipSync 升级到 1.4.2；补全 ffmpeg 批量转码参数说明。"
+    },
+    {
+      "version": "2026.09.27.1",
+      "released_at": "2026-09-27",
+      "notes": "Docker 清理命令增加数据卷删除提示；修正窗口主题配置项命名。"
+    },
+    {
+      "version": "2026.08.12.1",
+      "released_at": "2026-08-12",
+      "notes": "首个正式数据集版本。"
+    }
+  ]
+}

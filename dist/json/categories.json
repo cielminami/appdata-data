@@ -1,0 +1,69 @@
+{
+  "table": "categories",
+  "dataset_version": "2026.10.29.2",
+  "columns": [
+    "id",
+    "slug",
+    "name",
+    "kind",
+    "parent_id",
+    "description",
+    "sort_weight"
+  ],
+  "rows": [
+    {
+      "id": 1,
+      "slug": "desktop-tools",
+      "name": "桌面工具",
+      "kind": "work",
+      "parent_id": null,
+      "description": "Windows 与 macOS 上的常驻工具",
+      "sort_weight": 100
+    },
+    {
+      "id": 2,
+      "slug": "mobile-tools",
+      "name": "移动端",
+      "kind": "work",
+      "parent_id": null,
+      "description": "Android 与 iOS 应用",
+      "sort_weight": 90
+    },
+    {
+      "id": 3,
+      "slug": "command-install",
+      "name": "安装与依赖",
+      "kind": "command",
+      "parent_id": null,
+      "description": "包管理器与环境准备",
+      "sort_weight": 100
+    },
+    {
+      "id": 4,
+      "slug": "command-media",
+      "name": "媒体处理",
+      "kind": "command",
+      "parent_id": null,
+      "description": "音视频与图片批处理",
+      "sort_weight": 90
+    },
+    {
+      "id": 5,
+      "slug": "command-net",
+      "name": "网络与代理",
+      "kind": "command",
+      "parent_id": null,
+      "description": "代理、端口转发、连通性排查",
+      "sort_weight": 80
+    },
+    {
+      "id": 6,
+      "slug": "command-maintenance",
+      "name": "系统维护",
+      "kind": "command",
+      "parent_id": null,
+      "description": "清理、配额、磁盘占用",
+      "sort_weight": 70
+    }
+  ]
+}

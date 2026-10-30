@@ -1,0 +1,54 @@
+{
+  "table": "command_tags",
+  "dataset_version": "2026.10.29.2",
+  "columns": [
+    "command_id",
+    "tag_id"
+  ],
+  "rows": [
+    {
+      "command_id": 3,
+      "tag_id": 1
+    },
+    {
+      "command_id": 2,
+      "tag_id": 2
+    },
+    {
+      "command_id": 5,
+      "tag_id": 2
+    },
+    {
+      "command_id": 2,
+      "tag_id": 3
+    },
+    {
+      "command_id": 4,
+      "tag_id": 3
+    },
+    {
+      "command_id": 5,
+      "tag_id": 3
+    },
+    {
+      "command_id": 2,
+      "tag_id": 6
+    },
+    {
+      "command_id": 1,
+      "tag_id": 7
+    },
+    {
+      "command_id": 3,
+      "tag_id": 8
+    },
+    {
+      "command_id": 5,
+      "tag_id": 8
+    },
+    {
+      "command_id": 4,
+      "tag_id": 9
+    }
+  ]
+}

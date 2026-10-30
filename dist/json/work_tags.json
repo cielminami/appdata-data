@@ -1,0 +1,46 @@
+{
+  "table": "work_tags",
+  "dataset_version": "2026.10.29.2",
+  "columns": [
+    "work_id",
+    "tag_id"
+  ],
+  "rows": [
+    {
+      "work_id": 1,
+      "tag_id": 1
+    },
+    {
+      "work_id": 2,
+      "tag_id": 1
+    },
+    {
+      "work_id": 1,
+      "tag_id": 2
+    },
+    {
+      "work_id": 4,
+      "tag_id": 2
+    },
+    {
+      "work_id": 1,
+      "tag_id": 3
+    },
+    {
+      "work_id": 4,
+      "tag_id": 3
+    },
+    {
+      "work_id": 3,
+      "tag_id": 4
+    },
+    {
+      "work_id": 1,
+      "tag_id": 5
+    },
+    {
+      "work_id": 2,
+      "tag_id": 6
+    }
+  ]
+}

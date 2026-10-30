@@ -1,0 +1,21 @@
+{
+  "categories": [
+    { "slug": "desktop-tools", "name": "桌面工具", "kind": "work", "parent": null, "description": "Windows 与 macOS 上的常驻工具", "sort_weight": 100 },
+    { "slug": "mobile-tools", "name": "移动端", "kind": "work", "parent": null, "description": "Android 与 iOS 应用", "sort_weight": 90 },
+    { "slug": "command-install", "name": "安装与依赖", "kind": "command", "parent": null, "description": "包管理器与环境准备", "sort_weight": 100 },
+    { "slug": "command-media", "name": "媒体处理", "kind": "command", "parent": null, "description": "音视频与图片批处理", "sort_weight": 90 },
+    { "slug": "command-net", "name": "网络与代理", "kind": "command", "parent": null, "description": "代理、端口转发、连通性排查", "sort_weight": 80 },
+    { "slug": "command-maintenance", "name": "系统维护", "kind": "command", "parent": null, "description": "清理、配额、磁盘占用", "sort_weight": 70 }
+  ],
+  "tags": [
+    { "slug": "windows", "name": "Windows", "color": "#0F6E56" },
+    { "slug": "macos", "name": "macOS", "color": "#5F5E5A" },
+    { "slug": "linux", "name": "Linux", "color": "#854F0B" },
+    { "slug": "android", "name": "Android", "color": "#3B6D11" },
+    { "slug": "self-hosted", "name": "自托管", "color": "#185FA5" },
+    { "slug": "ffmpeg", "name": "ffmpeg", "color": "#993556" },
+    { "slug": "git", "name": "git", "color": "#993C1D" },
+    { "slug": "网络", "name": "网络", "color": "#534AB7" },
+    { "slug": "危险操作", "name": "危险操作", "color": "#A32D2D" }
+  ]
+}

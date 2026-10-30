@@ -1,0 +1,278 @@
+{
+  "contract_version": 1,
+  "dataset_id": "widget-toolbox",
+  "schema_version": 1,
+  "conventions": {
+    "stable_key": "stability=stable 的列跨版本稳定，是映射时唯一可用的关联键",
+    "internal_id": "stability=internal 的列由构建期生成，跨版本不保证一致，禁止用于跨版本关联或增量对比",
+    "boolean": "布尔一律用整数 0/1 表示，不要按 true/false 处理",
+    "datetime": "日期时间一律为 ISO 8601 字符串，无时区的按本地日期处理",
+    "ordering": "sort_weight 为整数，数值越大越靠前；同值时按 stable_key 升序",
+    "deletion": "数据集只发全量快照，不携带删除标记；删除需要在导入端用主键差集识别",
+    "enum": "枚举列只会取声明过的值，遇到未知值应降级为默认分支而不是崩溃",
+    "nullability": "required=false 的列可能为 null，导入端必须能处理空值"
+  },
+  "tables": [
+    {
+      "name": "meta",
+      "role": "system",
+      "summary": "数据集自身的元信息，键值对形式，通常只在诊断时读取",
+      "identity": { "columns": ["key"], "stability": "stable" },
+      "ordering": null,
+      "columns": [
+        { "name": "key", "type": "TEXT", "stability": "stable", "required": true, "note": "元信息键，取值见 dataset_id / schema_version / built_at 等" },
+        { "name": "value", "type": "TEXT", "stability": "stable", "required": true, "note": "对应的值，统一按字符串处理" }
+      ],
+      "relations": [],
+      "invariants": ["key 全局唯一"]
+    },
+    {
+      "name": "categories",
+      "role": "taxonomy",
+      "summary": "分类树，作品与命令共用一张表，用 kind 区分归属",
+      "identity": { "columns": ["slug"], "stability": "stable" },
+      "ordering": { "column": "sort_weight", "direction": "desc" },
+      "columns": [
+        { "name": "id", "type": "INTEGER", "stability": "internal", "required": true, "note": "构建期自增主键，不要用于跨版本关联" },
+        { "name": "slug", "type": "TEXT", "stability": "stable", "required": true, "note": "分类唯一标识，改名等同新建" },
+        { "name": "name", "type": "TEXT", "stability": "stable", "required": true, "note": "展示名称，可随版本变化" },
+        { "name": "kind", "type": "TEXT", "stability": "stable", "required": true, "enum": { "work": "作品分类", "command": "命令分类" } },
+        { "name": "parent_id", "type": "INTEGER", "stability": "internal", "required": false, "note": "父分类的 id；为空表示顶层" },
+        { "name": "description", "type": "TEXT", "stability": "stable", "required": false },
+        { "name": "sort_weight", "type": "INTEGER", "stability": "stable", "required": true, "note": "越大越靠前" }
+      ],
+      "relations": [
+        { "column": "parent_id", "references_table": "categories", "references_column": "id", "cardinality": "many-to-one", "on_missing": "视为顶层" }
+      ],
+      "invariants": ["结构为树，不存在环", "kind 相同的分类 slug 不重复"]
+    },
+    {
+      "name": "tags",
+      "role": "taxonomy",
+      "summary": "标签字典，作品与命令共用，多对多通过关联表连接",
+      "identity": { "columns": ["slug"], "stability": "stable" },
+      "ordering": null,
+      "columns": [
+        { "name": "id", "type": "INTEGER", "stability": "internal", "required": true },
+        { "name": "slug", "type": "TEXT", "stability": "stable", "required": true, "note": "标签唯一标识" },
+        { "name": "name", "type": "TEXT", "stability": "stable", "required": true, "note": "展示名称" },
+        { "name": "color", "type": "TEXT", "stability": "volatile", "required": false, "note": "#RRGGBB 形式，仅供参考的配色建议" }
+      ],
+      "relations": [],
+      "invariants": ["slug 全局唯一"]
+    },
+    {
+      "name": "works",
+      "role": "content",
+      "summary": "作品条目，一条记录代表一个可分发或可展示的作品",
+      "identity": { "columns": ["slug"], "stability": "stable" },
+      "ordering": { "column": "sort_weight", "direction": "desc" },
+      "lifecycle": {
+        "column": "status",
+        "states": { "draft": "未发布，导入端应默认隐藏", "released": "已发布", "archived": "已归档，建议标注但不隐藏" }
+      },
+      "columns": [
+        { "name": "id", "type": "INTEGER", "stability": "internal", "required": true },
+        { "name": "slug", "type": "TEXT", "stability": "stable", "required": true, "note": "作品唯一标识，是唯一可用的关联键" },
+        { "name": "title", "type": "TEXT", "stability": "stable", "required": true },
+        { "name": "subtitle", "type": "TEXT", "stability": "volatile", "required": false, "note": "副标题，营销性文案，可能频繁调整" },
+        { "name": "category_id", "type": "INTEGER", "stability": "internal", "required": false },
+        { "name": "summary", "type": "TEXT", "stability": "volatile", "required": false, "note": "纯文本摘要" },
+        { "name": "body_md", "type": "TEXT", "stability": "volatile", "required": false, "note": "Markdown 正文，导入端自行渲染" },
+        { "name": "cover_url", "type": "TEXT", "stability": "volatile", "required": false, "note": "绝对 URL，可能为空" },
+        { "name": "status", "type": "TEXT", "stability": "stable", "required": true, "enum": { "draft": "草稿", "released": "已发布", "archived": "已归档" } },
+        { "name": "license", "type": "TEXT", "stability": "stable", "required": false, "note": "如 MIT / CC-BY-4.0 / Proprietary" },
+        { "name": "version", "type": "TEXT", "stability": "volatile", "required": false, "note": "作品自身的版本号，与数据集版本无关" },
+        { "name": "released_at", "type": "TEXT", "stability": "stable", "required": false, "note": "首发日期 YYYY-MM-DD" },
+        { "name": "updated_at", "type": "TEXT", "stability": "volatile", "required": false, "note": "最近更新日期 YYYY-MM-DD" },
+        { "name": "sort_weight", "type": "INTEGER", "stability": "stable", "required": true }
+      ],
+      "relations": [
+        { "column": "category_id", "references_table": "categories", "references_column": "id", "cardinality": "many-to-one", "on_missing": "视为未分类" }
+      ],
+      "invariants": ["slug 全局唯一", "同一作品可挂多个平台的多份附件"]
+    },
+    {
+      "name": "work_assets",
+      "role": "content",
+      "summary": "作品的可分发资源，一个作品可有多条，按平台区分",
+      "identity": { "columns": ["work_id", "platform", "kind"], "stability": "derived" },
+      "ordering": { "column": "sort_weight", "direction": "desc" },
+      "columns": [
+        { "name": "id", "type": "INTEGER", "stability": "internal", "required": true },
+        { "name": "work_id", "type": "INTEGER", "stability": "internal", "required": true, "note": "关联 works.id，导入时需换成 works.slug 关联" },
+        { "name": "kind", "type": "TEXT", "stability": "stable", "required": true, "enum": { "download": "可下载产物", "preview": "预览图或演示", "source": "源码仓库", "doc": "文档链接" } },
+        { "name": "platform", "type": "TEXT", "stability": "stable", "required": true, "enum": { "any": "不限平台", "android": "Android", "ios": "iOS", "windows": "Windows", "macos": "macOS", "linux": "Linux", "web": "网页" } },
+        { "name": "label", "type": "TEXT", "stability": "volatile", "required": false, "note": "展示用文案" },
+        { "name": "url", "type": "TEXT", "stability": "volatile", "required": true, "note": "绝对 URL" },
+        { "name": "size_bytes", "type": "INTEGER", "stability": "volatile", "required": false, "note": "字节数，可能为空" },
+        { "name": "sha256", "type": "TEXT", "stability": "volatile", "required": false, "note": "文件校验和，供下载后校验" },
+        { "name": "version", "type": "TEXT", "stability": "volatile", "required": false },
+        { "name": "sort_weight", "type": "INTEGER", "stability": "stable", "required": true }
+      ],
+      "relations": [
+        { "column": "work_id", "references_table": "works", "references_column": "id", "cardinality": "many-to-one", "on_missing": "丢弃该行" }
+      ],
+      "invariants": ["同一作品的同一 (platform, kind) 组合通常只有一条"]
+    },
+    {
+      "name": "work_tags",
+      "role": "relation",
+      "summary": "作品与标签的多对多关联；导入端应转换为 slug 对 slug 的形式",
+      "identity": { "columns": ["work_id", "tag_id"], "stability": "derived" },
+      "ordering": null,
+      "columns": [
+        { "name": "work_id", "type": "INTEGER", "stability": "internal", "required": true },
+        { "name": "tag_id", "type": "INTEGER", "stability": "internal", "required": true }
+      ],
+      "relations": [
+        { "column": "work_id", "references_table": "works", "references_column": "id", "cardinality": "many-to-one", "on_missing": "丢弃该行" },
+        { "column": "tag_id", "references_table": "tags", "references_column": "id", "cardinality": "many-to-one", "on_missing": "丢弃该行" }
+      ],
+      "invariants": ["(work_id, tag_id) 唯一", "两列都是内部 id，必须先翻译成 works.slug 与 tags.slug 再入库"]
+    },
+    {
+      "name": "commands",
+      "role": "content",
+      "summary": "终端命令条目，一条记录为一条可直接执行的命令；代码与参数在子表中",
+      "identity": { "columns": ["slug"], "stability": "stable" },
+      "ordering": { "column": "sort_weight", "direction": "desc" },
+      "columns": [
+        { "name": "id", "type": "INTEGER", "stability": "internal", "required": true },
+        { "name": "slug", "type": "TEXT", "stability": "stable", "required": true, "note": "命令唯一标识，映射与增量对比都用它" },
+        { "name": "title", "type": "TEXT", "stability": "stable", "required": true },
+        { "name": "category_id", "type": "INTEGER", "stability": "internal", "required": false },
+        { "name": "summary", "type": "TEXT", "stability": "volatile", "required": false },
+        { "name": "shell", "type": "TEXT", "stability": "stable", "required": true, "enum": { "bash": "Bash", "zsh": "Zsh", "sh": "POSIX sh", "powershell": "PowerShell", "cmd": "Windows CMD" } },
+        { "name": "os_scope", "type": "TEXT", "stability": "stable", "required": true, "enum": { "any": "跨平台", "windows": "仅 Windows", "macos": "仅 macOS", "linux": "仅 Linux", "android": "仅 Android" } },
+        { "name": "danger", "type": "TEXT", "stability": "stable", "required": true, "enum": { "safe": "只读或可回退，无需额外确认", "caution": "改变环境状态，执行前需提示", "dangerous": "不可逆，需二次确认" } },
+        { "name": "needs_admin", "type": "INTEGER", "stability": "stable", "required": true, "note": "0 或 1，是否需要管理员权限" },
+        { "name": "needs_network", "type": "INTEGER", "stability": "stable", "required": true, "note": "0 或 1，是否需要联网" },
+        { "name": "doc_url", "type": "TEXT", "stability": "volatile", "required": false },
+        { "name": "sort_weight", "type": "INTEGER", "stability": "stable", "required": true },
+        { "name": "created_at", "type": "TEXT", "stability": "volatile", "required": false, "note": "YYYY-MM-DD" },
+        { "name": "updated_at", "type": "TEXT", "stability": "volatile", "required": false, "note": "YYYY-MM-DD，可用于粗略识别变更" }
+      ],
+      "relations": [
+        { "column": "category_id", "references_table": "categories", "references_column": "id", "cardinality": "many-to-one", "on_missing": "视为未分类" }
+      ],
+      "invariants": ["slug 全局唯一", "danger=dangerous 的命令必须有二次确认提示"]
+    },
+    {
+      "name": "command_snippets",
+      "role": "content",
+      "summary": "命令的代码块，一条命令可有多段，用 seq 排序",
+      "identity": { "columns": ["command_id", "seq"], "stability": "derived" },
+      "ordering": { "column": "seq", "direction": "asc" },
+      "columns": [
+        { "name": "id", "type": "INTEGER", "stability": "internal", "required": true },
+        { "name": "command_id", "type": "INTEGER", "stability": "internal", "required": true, "note": "关联 commands.id" },
+        { "name": "seq", "type": "INTEGER", "stability": "stable", "required": true, "note": "展示顺序，从 0 开始" },
+        { "name": "lang", "type": "TEXT", "stability": "stable", "required": true, "note": "语法高亮标识，取值同 shell" },
+        { "name": "title", "type": "TEXT", "stability": "volatile", "required": false },
+        { "name": "code", "type": "TEXT", "stability": "volatile", "required": true, "note": "原始代码，可能含 ${param} 占位符" },
+        { "name": "note", "type": "TEXT", "stability": "volatile", "required": false, "note": "补充说明，纯文本" }
+      ],
+      "relations": [
+        { "column": "command_id", "references_table": "commands", "references_column": "id", "cardinality": "many-to-one", "on_missing": "丢弃该行" }
+      ],
+      "invariants": ["(command_id, seq) 唯一", "code 中的 ${name} 必须能在 command_params 中找到同名记录"]
+    },
+    {
+      "name": "command_params",
+      "role": "content",
+      "summary": "命令参数定义，供生成表单或做占位符替换",
+      "identity": { "columns": ["command_id", "name"], "stability": "derived" },
+      "ordering": { "column": "seq", "direction": "asc" },
+      "columns": [
+        { "name": "id", "type": "INTEGER", "stability": "internal", "required": true },
+        { "name": "command_id", "type": "INTEGER", "stability": "internal", "required": true },
+        { "name": "seq", "type": "INTEGER", "stability": "stable", "required": true },
+        { "name": "name", "type": "TEXT", "stability": "stable", "required": true, "note": "对应代码里的 ${name}" },
+        { "name": "alias", "type": "TEXT", "stability": "stable", "required": false, "note": "短名，可空" },
+        { "name": "value_type", "type": "TEXT", "stability": "stable", "required": true, "enum": { "string": "任意字符串", "int": "整数", "float": "小数", "bool": "布尔", "path": "文件或目录路径", "enum": "限定取值，见 enum_values" } },
+        { "name": "required", "type": "INTEGER", "stability": "stable", "required": true, "note": "0 或 1" },
+        { "name": "default_value", "type": "TEXT", "stability": "volatile", "required": false, "note": "统一按字符串处理，按 value_type 解析" },
+        { "name": "placeholder", "type": "TEXT", "stability": "volatile", "required": false },
+        { "name": "enum_values", "type": "TEXT", "stability": "stable", "required": false, "note": "逗号分隔的候选值，仅 value_type=enum 时有意义" },
+        { "name": "description", "type": "TEXT", "stability": "volatile", "required": false }
+      ],
+      "relations": [
+        { "column": "command_id", "references_table": "commands", "references_column": "id", "cardinality": "many-to-one", "on_missing": "丢弃该行" }
+      ],
+      "invariants": ["(command_id, name) 唯一", "value_type=enum 时 enum_values 非空"]
+    },
+    {
+      "name": "command_tags",
+      "role": "relation",
+      "summary": "命令与标签的多对多关联；导入端应转换为 slug 对 slug",
+      "identity": { "columns": ["command_id", "tag_id"], "stability": "derived" },
+      "ordering": null,
+      "columns": [
+        { "name": "command_id", "type": "INTEGER", "stability": "internal", "required": true },
+        { "name": "tag_id", "type": "INTEGER", "stability": "internal", "required": true }
+      ],
+      "relations": [
+        { "column": "command_id", "references_table": "commands", "references_column": "id", "cardinality": "many-to-one", "on_missing": "丢弃该行" },
+        { "column": "tag_id", "references_table": "tags", "references_column": "id", "cardinality": "many-to-one", "on_missing": "丢弃该行" }
+      ],
+      "invariants": ["(command_id, tag_id) 唯一"]
+    },
+    {
+      "name": "config_groups",
+      "role": "content",
+      "summary": "静态配置的分组，仅用于组织展示，不影响语义",
+      "identity": { "columns": ["key"], "stability": "stable" },
+      "ordering": { "column": "sort_weight", "direction": "desc" },
+      "columns": [
+        { "name": "id", "type": "INTEGER", "stability": "internal", "required": true },
+        { "name": "key", "type": "TEXT", "stability": "stable", "required": true },
+        { "name": "label", "type": "TEXT", "stability": "volatile", "required": true },
+        { "name": "description", "type": "TEXT", "stability": "volatile", "required": false },
+        { "name": "sort_weight", "type": "INTEGER", "stability": "stable", "required": true }
+      ],
+      "relations": [],
+      "invariants": ["key 全局唯一"]
+    },
+    {
+      "name": "config_entries",
+      "role": "content",
+      "summary": "静态配置项，value 是建议值，默认值在 default_value",
+      "identity": { "columns": ["group_id", "key"], "stability": "derived" },
+      "ordering": { "column": "sort_weight", "direction": "desc" },
+      "columns": [
+        { "name": "id", "type": "INTEGER", "stability": "internal", "required": true },
+        { "name": "group_id", "type": "INTEGER", "stability": "internal", "required": true },
+        { "name": "key", "type": "TEXT", "stability": "stable", "required": true, "note": "组内唯一；跨组可重名" },
+        { "name": "label", "type": "TEXT", "stability": "volatile", "required": false },
+        { "name": "value_type", "type": "TEXT", "stability": "stable", "required": true, "enum": { "string": "字符串", "int": "整数", "float": "小数", "bool": "布尔，用 0/1", "json": "JSON 字符串，需自行解析", "enum": "限定取值" } },
+        { "name": "value", "type": "TEXT", "stability": "volatile", "required": false, "note": "当前建议值，按 value_type 解析" },
+        { "name": "default_value", "type": "TEXT", "stability": "stable", "required": false, "note": "兜底值，value 为空时使用" },
+        { "name": "enum_values", "type": "TEXT", "stability": "stable", "required": false, "note": "逗号分隔" },
+        { "name": "description", "type": "TEXT", "stability": "volatile", "required": false },
+        { "name": "scope", "type": "TEXT", "stability": "stable", "required": true, "enum": { "app": "全局生效", "device": "按设备保存", "user": "按用户保存" } },
+        { "name": "min_version", "type": "TEXT", "stability": "stable", "required": false, "note": "客户端版本下限，低于则忽略该项" },
+        { "name": "max_version", "type": "TEXT", "stability": "stable", "required": false, "note": "客户端版本上限" },
+        { "name": "sort_weight", "type": "INTEGER", "stability": "stable", "required": true }
+      ],
+      "relations": [
+        { "column": "group_id", "references_table": "config_groups", "references_column": "id", "cardinality": "many-to-one", "on_missing": "丢弃该行" }
+      ],
+      "invariants": ["(group_id, key) 唯一", "scope 决定该值是否允许用户覆盖"]
+    },
+    {
+      "name": "changelog",
+      "role": "system",
+      "summary": "数据集自身的版本历史，第一条是最新版本",
+      "identity": { "columns": ["version"], "stability": "stable" },
+      "ordering": { "column": "released_at", "direction": "desc" },
+      "columns": [
+        { "name": "version", "type": "TEXT", "stability": "stable", "required": true, "note": "格式 YYYY.MM.DD.N，与 manifest.dataset_version 一致" },
+        { "name": "released_at", "type": "TEXT", "stability": "stable", "required": true, "note": "YYYY-MM-DD" },
+        { "name": "notes", "type": "TEXT", "stability": "volatile", "required": false }
+      ],
+      "relations": [],
+      "invariants": ["version 全局唯一", "按 released_at 倒序，首条即当前版本"]
+    }
+  ]
+}

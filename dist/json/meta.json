@@ -1,0 +1,34 @@
+{
+  "table": "meta",
+  "dataset_version": "2026.10.29.2",
+  "columns": [
+    "key",
+    "value"
+  ],
+  "rows": [
+    {
+      "key": "dataset_id",
+      "value": "widget-toolbox"
+    },
+    {
+      "key": "title",
+      "value": "Toolbox 只读数据集"
+    },
+    {
+      "key": "schema_version",
+      "value": "1"
+    },
+    {
+      "key": "min_client_build",
+      "value": "1"
+    },
+    {
+      "key": "default_locale",
+      "value": "zh-CN"
+    },
+    {
+      "key": "generator",
+      "value": "appdata-server/build.py"
+    }
+  ]
+}
